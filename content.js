@@ -1,0 +1,627 @@
+/* Formulario de Probabilidad y Estadística
+   Contenido estructurado. Cada tema → subsecciones → cards/distribuciones/callouts.
+   Basado en las series 1–5 de la Facultad de Ingeniería.
+*/
+window.FORM = [
+
+/* ============================================================
+   TEMA 1 · TEORÍA DE LA PROBABILIDAD
+   ============================================================ */
+{
+  id: 't1',
+  num: '01',
+  title: 'Teoría de la Probabilidad',
+  subtitle: 'Fundamentos · combinatoria · axiomas · condicional · Bayes',
+  sections: [
+
+    { id: 't1-a', title: 'Conjuntos y espacio muestral',
+      cards: [
+        { name: 'Espacio muestral', math:
+          String.raw`$$S = \{\,\text{todos los resultados posibles de un experimento aleatorio}\,\}$$`,
+          tip: 'Enumera $S$ antes de calcular; de ahí salen $|S|$ y los eventos.' },
+        { name: 'Evento', math:
+          String.raw`$$A \subseteq S \qquad |A| = \#\{\text{resultados favorables a } A\}$$`,
+          tip: 'Todo evento es subconjunto de $S$; “favorables” son los que cumplen la condición.' },
+        { name: 'Unión · Intersección · Complemento', math:
+          String.raw`\begin{align*} A \cup B &= \{x : x\in A \text{ ó } x\in B\} \\ A \cap B &= \{x : x\in A \text{ y } x\in B\} \\ A^{c} &= S \setminus A \end{align*}`,
+          tip: 'Lee “o”→unión, “y”→intersección, “no”→complemento.' },
+        { name: 'Leyes de De Morgan', math:
+          String.raw`\begin{align*} (A\cup B)^{c} &= A^{c}\cap B^{c} \\ (A\cap B)^{c} &= A^{c}\cup B^{c} \end{align*}`,
+          tip: 'Útiles para convertir “al menos uno” en “ninguno”.' },
+        { name: 'Eventos mutuamente excluyentes', math:
+          String.raw`$$A \cap B = \varnothing \;\Longleftrightarrow\; P(A\cap B)=0$$`,
+          tip: 'No pueden ocurrir a la vez; NO confundir con independientes.' },
+      ]
+    },
+
+    { id: 't1-b', title: 'Técnicas de conteo',
+      cards: [
+        { name: 'Principio multiplicativo', math:
+          String.raw`$$N = n_{1}\cdot n_{2}\cdot\ldots\cdot n_{k}$$`,
+          tip: 'Cuando las etapas son secuenciales y cada una tiene $n_i$ opciones.' },
+        { name: 'Principio aditivo', math:
+          String.raw`$$N = n_{1}+n_{2}+\ldots+n_{k}$$`,
+          tip: 'Cuando eliges UNA de varias alternativas excluyentes (“o”).' },
+        { name: 'Permutaciones (importa el orden)', math:
+          String.raw`$$_{n}P_{r} \;=\; \dfrac{n!}{(n-r)!}$$`,
+          tip: 'Arreglos de $r$ tomados de $n$ distintos, sin repetición, con orden.' },
+        { name: 'Permutaciones con repetición', math:
+          String.raw`$$P = \dfrac{n!}{n_{1}!\,n_{2}!\,\cdots\,n_{k}!}$$`,
+          tip: 'Cuando hay elementos repetidos de $k$ tipos (palabras con letras iguales).' },
+        { name: 'Permutaciones circulares', math:
+          String.raw`$$P_{c} = (n-1)!$$`,
+          tip: 'Ordenar $n$ objetos en círculo; fija uno para eliminar rotaciones.' },
+        { name: 'Combinaciones (no importa el orden)', math:
+          String.raw`$$_{n}C_{r} \;=\; \binom{n}{r} \;=\; \dfrac{n!}{r!\,(n-r)!}$$`,
+          tip: 'Selecciones de $r$ elementos de $n$; usar cuando el orden no altera el resultado.' },
+        { name: 'Identidades útiles', math:
+          String.raw`\begin{align*} \binom{n}{0}&=\binom{n}{n}=1 \\ \binom{n}{r}&=\binom{n}{n-r} \\ \binom{n}{r}&=\binom{n-1}{r-1}+\binom{n-1}{r} \end{align*}`,
+          tip: 'La segunda (simetría) simplifica cálculos cuando $r$ es grande.' },
+      ],
+      callouts: [
+        { cap: 'error común · conteo',
+          items: [
+            '<strong>Confundir permutación con combinación.</strong> “¿Importa el orden?” → si sí, $P$; si no, $C$. Un comité es $C$; un podio es $P$.',
+            '<strong>Usar $n!$ cuando hay repetidos.</strong> La palabra MISSISSIPPI no es $11!$: se divide entre los factoriales de cada letra repetida.',
+            '<strong>Olvidar restar el caso no permitido.</strong> “al menos uno” suele calcularse como $1-P(\\text{ninguno})$.',
+          ]
+        }
+      ]
+    },
+
+    { id: 't1-c', title: 'Axiomas y reglas básicas',
+      cards: [
+        { name: 'Definición clásica (Laplace)', math:
+          String.raw`$$P(A) = \dfrac{\#\,\text{casos favorables}}{\#\,\text{casos totales}} = \dfrac{|A|}{|S|}$$`,
+          tip: 'Válida sólo si los resultados de $S$ son equiprobables.' },
+        { name: 'Axiomas de Kolmogórov', math:
+          String.raw`\begin{align*} &\text{(i)}\; 0 \le P(A) \le 1 \\ &\text{(ii)}\; P(S)=1 \\ &\text{(iii)}\; A\cap B=\varnothing \Rightarrow P(A\cup B)=P(A)+P(B) \end{align*}`,
+          tip: 'Toda regla posterior se deriva de estos tres; si violas uno, hay error.' },
+        { name: 'Complemento', math:
+          String.raw`$$P(A^{c}) = 1 - P(A)$$`,
+          tip: 'Atajo: cuando “al menos uno”, calcula el complemento “ninguno”.' },
+        { name: 'Probabilidad de la unión', math:
+          String.raw`$$P(A\cup B) = P(A)+P(B)-P(A\cap B)$$`,
+          tip: 'Se resta la intersección para no contarla dos veces.' },
+        { name: 'Unión de tres eventos', math:
+          String.raw`\begin{align*} P(A\cup B\cup C) &= P(A)+P(B)+P(C) \\ &\quad - P(A\cap B)-P(A\cap C)-P(B\cap C) \\ &\quad + P(A\cap B\cap C) \end{align*}`,
+          tip: 'Inclusión–exclusión: suma, resta pares, suma tripletas.' },
+        { name: 'Diferencia', math:
+          String.raw`$$P(A \setminus B) = P(A) - P(A\cap B)$$`,
+          tip: '“$A$ pero no $B$”.' },
+      ]
+    },
+
+    { id: 't1-d', title: 'Probabilidad condicional e independencia',
+      cards: [
+        { name: 'Probabilidad condicional', math:
+          String.raw`$$P(A\mid B) = \dfrac{P(A\cap B)}{P(B)}, \quad P(B)>0$$`,
+          tip: 'Restringe el espacio muestral a $B$; numerador es lo que cae “en ambos”.' },
+        { name: 'Regla del producto', math:
+          String.raw`\begin{align*} P(A\cap B) &= P(A\mid B)\,P(B) \\ &= P(B\mid A)\,P(A) \end{align*}`,
+          tip: 'Ideal cuando la condicional es dato directo (p.ej. con y sin reemplazo).' },
+        { name: 'Regla del producto (generalizada)', math:
+          String.raw`$$P(A_{1}\cap A_{2}\cap\cdots\cap A_{n}) = P(A_{1})\,P(A_{2}\mid A_{1})\cdots P(A_{n}\mid A_{1}\cap\cdots\cap A_{n-1})$$`,
+          tip: 'Útil para secuencias sin reemplazo (extracciones encadenadas).' },
+        { name: 'Independencia de dos eventos', math:
+          String.raw`$$A \perp B \;\Longleftrightarrow\; P(A\cap B)=P(A)\,P(B)$$`,
+          tip: 'Equivalente a $P(A\mid B)=P(A)$. Excluyentes ⟂ independientes son cosas distintas.' },
+        { name: 'Independencia de $n$ eventos', math:
+          String.raw`$$P\!\left(\bigcap_{i\in I} A_{i}\right) = \prod_{i\in I} P(A_{i}), \quad \forall I\subseteq\{1,\ldots,n\}$$`,
+          tip: 'Deben factorizarse TODAS las subcolecciones, no sólo por pares.' },
+      ],
+      callouts: [
+        { cap: 'error común · condicional',
+          items: [
+            '<strong>Invertir la condicional.</strong> $P(A\\mid B)\\neq P(B\\mid A)$ salvo casos especiales.',
+            '<strong>Confundir excluyentes con independientes.</strong> Si son excluyentes y $P(A),P(B)>0$, no pueden ser independientes.',
+            '<strong>Olvidar que el denominador cambia.</strong> Al condicionar en $B$, todo debe escalarse por $P(B)$.',
+          ]
+        }
+      ]
+    },
+
+    { id: 't1-e', title: 'Probabilidad total y Teorema de Bayes',
+      cards: [
+        { name: 'Partición del espacio muestral', math:
+          String.raw`$$\bigcup_{i=1}^{n} B_{i} = S, \quad B_{i}\cap B_{j}=\varnothing \;(i\neq j)$$`,
+          tip: 'Los $\\{B_i\\}$ son excluyentes y exhaustivos: todo $s\\in S$ está en exactamente uno.' },
+        { name: 'Teorema de la probabilidad total', math:
+          String.raw`$$P(A) = \sum_{i=1}^{n} P(A\mid B_{i})\,P(B_{i})$$`,
+          tip: 'Para “¿qué tan probable es $A$?” cuando sólo conoces $A$ bajo cada causa $B_i$.' },
+        { name: 'Teorema de Bayes', math:
+          String.raw`$$P(B_{k}\mid A) \;=\; \dfrac{P(A\mid B_{k})\,P(B_{k})}{\displaystyle\sum_{i=1}^{n} P(A\mid B_{i})\,P(B_{i})}$$`,
+          tip: 'Invierte la condicional: dado el efecto $A$, probabilidad de la causa $B_k$.' },
+        { name: 'Forma abreviada de Bayes', math:
+          String.raw`$$P(B\mid A) = \dfrac{P(A\mid B)\,P(B)}{P(A)}$$`,
+          tip: 'Mismo teorema sin partición explícita; útil si ya conoces $P(A)$.' },
+      ],
+      callouts: [
+        { cap: 'error común · Bayes',
+          items: [
+            '<strong>Sumar las $P(B_i)\\neq 1$.</strong> Siempre verifica que la partición cubre todo $S$ con probabilidades que suman 1.',
+            '<strong>Poner $P(A)$ en el numerador.</strong> Va en el denominador; el numerador es la conjunta $P(A\\cap B_k)$.',
+            '<strong>No distinguir prior de likelihood.</strong> $P(B_k)$ es el a priori; $P(A\\mid B_k)$ es la verosimilitud.',
+          ]
+        }
+      ]
+    },
+  ]
+},
+
+/* ============================================================
+   TEMA 2 · VARIABLE ALEATORIA UNIDIMENSIONAL
+   ============================================================ */
+{
+  id: 't2',
+  num: '02',
+  title: 'Variable Aleatoria',
+  subtitle: 'Funciones de probabilidad · esperanza · momentos · coeficientes',
+  sections: [
+
+    { id: 't2-a', title: 'Función de probabilidad',
+      cards: [
+        { name: 'Función masa de probabilidad (discreta)', math:
+          String.raw`\begin{align*} f(x_{i}) &= P(X = x_{i}) \ge 0 \\ \sum_{i} f(x_{i}) &= 1 \end{align*}`,
+          tip: 'Suma sobre TODOS los valores posibles; la suma debe dar exactamente 1.' },
+        { name: 'Función de densidad (continua)', math:
+          String.raw`\begin{align*} f(x) &\ge 0 \quad \forall x \\ \int_{-\infty}^{\infty} f(x)\,dx &= 1 \end{align*}`,
+          tip: '$f(x)$ no es probabilidad; $P(X=x)=0$. Lo que importa es el área bajo la curva.' },
+        { name: 'Probabilidad en un intervalo', math:
+          String.raw`\begin{align*} \text{Discreta:}\; P(a\le X\le b) &= \sum_{a \le x_i \le b} f(x_{i}) \\ \text{Continua:}\; P(a\le X\le b) &= \int_{a}^{b} f(x)\,dx \end{align*}`,
+          tip: 'En continua, $\\le$ o $<$ dan lo mismo; en discreta, cuidado con los extremos.' },
+        { name: 'Función acumulativa (FDA)', math:
+          String.raw`$$F(x) = P(X\le x) = \begin{cases} \displaystyle\sum_{x_{i}\le x} f(x_{i}) & \text{discreta} \\[4pt] \displaystyle\int_{-\infty}^{x} f(t)\,dt & \text{continua} \end{cases}$$`,
+          tip: '$F$ es no decreciente, $F(-\\infty)=0$, $F(\\infty)=1$.' },
+        { name: 'Probabilidades a partir de $F$', math:
+          String.raw`\begin{align*} P(a < X \le b) &= F(b)-F(a) \\ P(X > a) &= 1-F(a) \\ f(x) &= \dfrac{dF(x)}{dx} \text{ (continua)} \end{align*}`,
+          tip: 'Si te dan $F(x)$, deriva para obtener la densidad continua.' },
+        { name: 'Constante de normalización', math:
+          String.raw`$$\int_{-\infty}^{\infty} k\,g(x)\,dx = 1 \;\Longrightarrow\; k = \dfrac{1}{\int g(x)\,dx}$$`,
+          tip: 'Aplica cuando $f(x)=k\\,g(x)$: integra sobre el soporte y despeja $k$.' },
+      ]
+    },
+
+    { id: 't2-b', title: 'Esperanza, varianza y momentos',
+      cards: [
+        { name: 'Valor esperado', math:
+          String.raw`$$E[X] = \mu = \begin{cases} \displaystyle\sum_{i} x_{i}\,f(x_{i}) & \text{discreta} \\[4pt] \displaystyle\int_{-\infty}^{\infty} x\,f(x)\,dx & \text{continua} \end{cases}$$`,
+          tip: 'Promedio ponderado por probabilidad; es el “centro de gravedad” de la distribución.' },
+        { name: 'Esperanza de una función de $X$', math:
+          String.raw`$$E[g(X)] = \begin{cases} \displaystyle\sum_{i} g(x_{i})\,f(x_{i}) \\[4pt] \displaystyle\int g(x)\,f(x)\,dx \end{cases}$$`,
+          tip: 'Para $E[X^{2}]$, $E[e^{tX}]$, funciones de utilidad, etc.' },
+        { name: 'Propiedades de la esperanza', math:
+          String.raw`\begin{align*} E[aX+b] &= a\,E[X]+b \\ E[X+Y] &= E[X]+E[Y] \\ E[XY] &= E[X]E[Y] \quad (\text{si } X\perp Y) \end{align*}`,
+          tip: 'La linealidad vale siempre; la multiplicativa sólo con independencia.' },
+        { name: 'Varianza', math:
+          String.raw`$$\mathrm{Var}(X) = \sigma^{2} = E\!\left[(X-\mu)^{2}\right] = E[X^{2}] - \mu^{2}$$`,
+          tip: 'La versión $E[X^{2}]-\\mu^{2}$ es casi siempre más fácil de calcular.' },
+        { name: 'Propiedades de la varianza', math:
+          String.raw`\begin{align*} \mathrm{Var}(aX+b) &= a^{2}\,\mathrm{Var}(X) \\ \mathrm{Var}(X\pm Y) &= \mathrm{Var}(X)+\mathrm{Var}(Y) \quad (\text{si } X\perp Y) \end{align*}`,
+          tip: 'Constantes aditivas $b$ no mueven la varianza; los escalares $a$ sí (al cuadrado).' },
+        { name: 'Desviación estándar', math:
+          String.raw`$$\sigma = \sqrt{\mathrm{Var}(X)}$$`,
+          tip: 'Está en las mismas unidades que $X$; úsala para reportar dispersión.' },
+        { name: 'Momento de orden $r$', math:
+          String.raw`\begin{align*} \mu'_{r} &= E[X^{r}] \quad (\text{respecto al origen}) \\ \mu_{r} &= E[(X-\mu)^{r}] \quad (\text{central}) \end{align*}`,
+          tip: '$\\mu=\\mu\'_{1}$, $\\sigma^{2}=\\mu_{2}$, y $\\mu_{3}, \\mu_{4}$ dan simetría y curtosis.' },
+      ],
+      callouts: [
+        { cap: 'error común · esperanza / varianza',
+          items: [
+            '<strong>Olvidar la multiplicación por $f(x)$.</strong> $E[X]\\neq \\int x\\,dx$; va $\\int x\\,f(x)\\,dx$.',
+            '<strong>Tratar $\\mathrm{Var}(aX)$ como $a\\,\\mathrm{Var}(X)$.</strong> Es $a^{2}\\,\\mathrm{Var}(X)$.',
+            '<strong>Usar $E[X^{2}]=E[X]^{2}$.</strong> Sólo vale cuando $\\sigma^{2}=0$ (variable degenerada).',
+          ]
+        }
+      ]
+    },
+
+    { id: 't2-c', title: 'Medidas de forma',
+      cards: [
+        { name: 'Coeficiente de variación', math:
+          String.raw`$$\mathrm{CV} = \dfrac{\sigma}{\mu}$$`,
+          tip: 'Compara dispersión de distribuciones con escalas distintas; expresado como razón o %.' },
+        { name: 'Coeficiente de asimetría (sesgo)', math:
+          String.raw`$$\alpha_{3} = \dfrac{\mu_{3}}{\sigma^{3}} = \dfrac{E\!\left[(X-\mu)^{3}\right]}{\sigma^{3}}$$`,
+          tip: '$\\alpha_{3}>0$: sesgo a la derecha; $<0$: a la izquierda; $=0$: simétrica.' },
+        { name: 'Coeficiente de curtosis', math:
+          String.raw`$$\alpha_{4} = \dfrac{\mu_{4}}{\sigma^{4}}$$`,
+          tip: 'Normal $\\Rightarrow \\alpha_{4}=3$ (mesocúrtica). $>3$ leptocúrtica, $<3$ platicúrtica.' },
+        { name: 'Mediana (continua)', math:
+          String.raw`$$F(\mathrm{Me}) = \tfrac{1}{2} \quad\Longleftrightarrow\quad \int_{-\infty}^{\mathrm{Me}} f(x)\,dx = \tfrac{1}{2}$$`,
+          tip: 'Despeja $x$ en la FDA igualada a 0.5; es el valor que parte la probabilidad por la mitad.' },
+        { name: 'Moda', math:
+          String.raw`$$\mathrm{Mo} = \underset{x}{\arg\max}\,f(x)$$`,
+          tip: String.raw`Valor donde la fmp/fdp alcanza su máximo; en continua, $f'(x)=0$ y $f''(x)<0$.` },
+        { name: 'Cuantiles y percentiles', math:
+          String.raw`$$F(x_{p}) = p \;\Longrightarrow\; x_{p} = F^{-1}(p)$$`,
+          tip: 'Percentil $p\\cdot 100$: valor por debajo del cual cae el $p\\cdot 100\\%$ de la probabilidad.' },
+      ]
+    },
+
+    { id: 't2-d', title: 'Transformaciones',
+      cards: [
+        { name: 'Variable transformada $Y=g(X)$', math:
+          String.raw`$$f_{Y}(y) = f_{X}\!\bigl(g^{-1}(y)\bigr)\,\left|\dfrac{dg^{-1}(y)}{dy}\right|$$`,
+          tip: 'Válida si $g$ es monótona; el jacobiano es el valor absoluto de la derivada de la inversa.' },
+        { name: 'Estandarización', math:
+          String.raw`$$Z = \dfrac{X-\mu}{\sigma}, \quad E[Z]=0,\; \mathrm{Var}(Z)=1$$`,
+          tip: 'Paso previo para usar tablas (Normal estándar); quita unidades.' },
+        { name: 'Función generadora de momentos (FGM)', math:
+          String.raw`$$M_{X}(t) = E\!\left[e^{tX}\right]$$`,
+          tip: 'Los momentos se obtienen derivando en $t=0$: $\\mu_{r}=M_{X}^{(r)}(0)$.' },
+      ]
+    },
+  ]
+},
+
+/* ============================================================
+   TEMA 3 · VARIABLES ALEATORIAS CONJUNTAS
+   ============================================================ */
+{
+  id: 't3',
+  num: '03',
+  title: 'Variables Aleatorias Conjuntas',
+  subtitle: 'Distribuciones bivariadas · covarianza · correlación · independencia',
+  sections: [
+
+    { id: 't3-a', title: 'Distribuciones conjuntas',
+      cards: [
+        { name: 'Función conjunta (discreta)', math:
+          String.raw`\begin{align*} f(x,y) &= P(X=x,\;Y=y) \ge 0 \\ \sum_{x}\sum_{y} f(x,y) &= 1 \end{align*}`,
+          tip: 'Suma doble sobre todos los pares del soporte debe dar 1.' },
+        { name: 'Densidad conjunta (continua)', math:
+          String.raw`\begin{align*} f(x,y) &\ge 0 \\ \iint_{\mathbb{R}^{2}} f(x,y)\,dx\,dy &= 1 \end{align*}`,
+          tip: 'Define bien la región del soporte; la integral doble sobre ella debe dar 1.' },
+        { name: 'Probabilidad en una región', math:
+          String.raw`$$P\!\bigl((X,Y)\in A\bigr) = \iint_{A} f(x,y)\,dx\,dy$$`,
+          tip: 'Haz un dibujo del soporte y de $A$: los límites de integración salen de ahí.' },
+        { name: 'FDA conjunta', math:
+          String.raw`$$F(x,y) = P(X\le x,\;Y\le y)$$`,
+          tip: 'En continua, $f(x,y)=\\partial^{2}F/\\partial x\\,\\partial y$.' },
+      ]
+    },
+
+    { id: 't3-b', title: 'Marginales y condicionales',
+      cards: [
+        { name: 'Marginales (discreta)', math:
+          String.raw`\begin{align*} f_{X}(x) &= \sum_{y} f(x,y) \\ f_{Y}(y) &= \sum_{x} f(x,y) \end{align*}`,
+          tip: 'Suma fila (para $X$) o columna (para $Y$) en la tabla conjunta.' },
+        { name: 'Marginales (continua)', math:
+          String.raw`\begin{align*} f_{X}(x) &= \int_{-\infty}^{\infty} f(x,y)\,dy \\ f_{Y}(y) &= \int_{-\infty}^{\infty} f(x,y)\,dx \end{align*}`,
+          tip: 'Integra respecto a la variable que quieres eliminar, sobre su soporte.' },
+        { name: 'Distribución condicional', math:
+          String.raw`\begin{align*} f(y\mid x) &= \dfrac{f(x,y)}{f_{X}(x)}, \quad f_{X}(x)>0 \\ f(x\mid y) &= \dfrac{f(x,y)}{f_{Y}(y)} \end{align*}`,
+          tip: 'La conjunta dividida por la marginal de la condicionante.' },
+        { name: 'Independencia de $X$ y $Y$', math:
+          String.raw`$$X\perp Y \;\Longleftrightarrow\; f(x,y) = f_{X}(x)\,f_{Y}(y) \;\forall\,(x,y)$$`,
+          tip: 'Basta con un par donde NO se factorice para descartar independencia.' },
+      ],
+      callouts: [
+        { cap: 'error común · conjuntas',
+          items: [
+            '<strong>Confundir covarianza cero con independencia.</strong> $X\\perp Y \\Rightarrow \\sigma_{XY}=0$, pero no el recíproco.',
+            '<strong>Mala región de integración.</strong> Si $0\\le y\\le x\\le 2$, los límites de $y$ dependen de $x$; dibujar el soporte evita errores.',
+            '<strong>Calcular marginales desde la conjunta condicional.</strong> Necesitas la conjunta $f(x,y)$, no $f(y\\mid x)$ directamente.',
+          ]
+        }
+      ]
+    },
+
+    { id: 't3-c', title: 'Esperanza, covarianza y correlación',
+      cards: [
+        { name: 'Esperanza conjunta', math:
+          String.raw`$$E[g(X,Y)] = \iint g(x,y)\,f(x,y)\,dx\,dy$$`,
+          tip: 'Para $E[XY]$, toma $g(x,y)=xy$ y evalúa la doble integral/suma.' },
+        { name: 'Covarianza', math:
+          String.raw`$$\sigma_{XY} = \mathrm{Cov}(X,Y) = E[XY] - E[X]\,E[Y]$$`,
+          tip: 'Mide co-variación lineal. Signo indica dirección; magnitud depende de las escalas.' },
+        { name: 'Coeficiente de correlación', math:
+          String.raw`$$\rho_{XY} = \dfrac{\sigma_{XY}}{\sigma_{X}\,\sigma_{Y}}, \quad -1 \le \rho \le 1$$`,
+          tip: 'Versión adimensional de la covarianza; $|\\rho|=1$ implica relación lineal exacta.' },
+        { name: 'Propiedades útiles', math:
+          String.raw`\begin{align*} \mathrm{Cov}(X,X) &= \mathrm{Var}(X) \\ \mathrm{Cov}(aX+b,\,cY+d) &= ac\,\mathrm{Cov}(X,Y) \\ \mathrm{Var}(X\pm Y) &= \mathrm{Var}(X)+\mathrm{Var}(Y)\pm 2\,\mathrm{Cov}(X,Y) \end{align*}`,
+          tip: 'Constantes aditivas no afectan la covarianza; las multiplicativas sí (linealmente).' },
+        { name: 'Esperanza y varianza condicional', math:
+          String.raw`\begin{align*} E[Y\mid X=x] &= \int y\,f(y\mid x)\,dy \\ \mathrm{Var}(Y\mid X=x) &= E[Y^{2}\mid x] - \bigl(E[Y\mid x]\bigr)^{2} \end{align*}`,
+          tip: '$E[Y\\mid X]$ es función de $X$: al variar $x$ cambia el valor esperado de $Y$.' },
+      ]
+    },
+  ]
+},
+
+/* ============================================================
+   TEMA 4 · DISTRIBUCIONES PARA VA DISCRETAS
+   ============================================================ */
+{
+  id: 't4',
+  num: '04',
+  title: 'Modelos Probabilísticos · VA Discretas',
+  subtitle: 'Bernoulli · Binomial · Hipergeométrica · Geométrica · Pascal · Poisson',
+  sections: [
+
+    { id: 't4-intro', title: 'Cuándo usar cada modelo (árbol de decisión)',
+      table: {
+        head: ['Pregunta clave', 'Si sí', 'Si no'],
+        rows: [
+          ['¿Un solo ensayo con éxito/fracaso?', '<b>Bernoulli</b>', '↓'],
+          ['¿$n$ ensayos independientes, $p$ constante, cuentas éxitos?', '<b>Binomial</b>', '↓'],
+          ['¿Muestreo sin reemplazo de población finita con $K$ éxitos?', '<b>Hipergeométrica</b>', '↓'],
+          ['¿Número de ensayos hasta el 1er éxito?', '<b>Geométrica</b>', '↓'],
+          ['¿Número de ensayos hasta el $r$-ésimo éxito?', '<b>Pascal (binomial negativa)</b>', '↓'],
+          ['¿Eventos raros en intervalo fijo (tiempo, espacio)?', '<b>Poisson</b>', '—'],
+        ]
+      }
+    },
+
+    { id: 't4-bernoulli', dist: {
+      name: 'Bernoulli', notation: 'X \\sim \\mathrm{Ber}(p)',
+      use: 'Un único ensayo con dos resultados: éxito (prob $p$) o fracaso (prob $q=1-p$).',
+      fmp: String.raw`$$f(x) = p^{x}(1-p)^{1-x}, \quad x\in\{0,1\}$$`,
+      mean: String.raw`$$\mu = p$$`,
+      var:  String.raw`$$\sigma^{2} = p(1-p) = pq$$`,
+      tip: 'Bloque básico del resto: la binomial es suma de $n$ Bernoulli independientes.'
+    }},
+
+    { id: 't4-binomial', dist: {
+      name: 'Binomial', notation: 'X \\sim \\mathrm{Bin}(n,p)',
+      use: 'Número de éxitos en $n$ ensayos independientes con $p$ constante.',
+      fmp: String.raw`$$f(x) = \binom{n}{x} p^{x}(1-p)^{\,n-x}, \quad x=0,1,\ldots,n$$`,
+      mean: String.raw`$$\mu = np$$`,
+      var:  String.raw`$$\sigma^{2} = np(1-p) = npq$$`,
+      tip: 'Verifica las condiciones: $n$ fijo, ensayos independientes y $p$ constante.'
+    }},
+
+    { id: 't4-hiper', dist: {
+      name: 'Hipergeométrica', notation: 'X \\sim H(N,K,n)',
+      use: 'Muestreo SIN reemplazo: se toman $n$ de una población de $N$ con $K$ éxitos.',
+      fmp: String.raw`$$f(x) = \dfrac{\dbinom{K}{x}\dbinom{N-K}{n-x}}{\dbinom{N}{n}}$$`,
+      mean: String.raw`$$\mu = n\,\dfrac{K}{N}$$`,
+      var:  String.raw`$$\sigma^{2} = n\,\dfrac{K}{N}\,\dfrac{N-K}{N}\,\dfrac{N-n}{N-1}$$`,
+      tip: 'Si $n/N \\le 0.05$, se aproxima bien con Binomial($n, K/N$).'
+    }},
+
+    { id: 't4-geo', dist: {
+      name: 'Geométrica', notation: 'X \\sim \\mathrm{Geo}(p)',
+      use: 'Número de ensayos hasta obtener el primer éxito (convención con $x \\ge 1$).',
+      fmp: String.raw`$$f(x) = (1-p)^{\,x-1}\,p, \quad x=1,2,3,\ldots$$`,
+      mean: String.raw`$$\mu = \dfrac{1}{p}$$`,
+      var:  String.raw`$$\sigma^{2} = \dfrac{1-p}{p^{2}}$$`,
+      tip: 'Propiedad de “pérdida de memoria”: $P(X>m+n\\mid X>m)=P(X>n)$.'
+    }},
+
+    { id: 't4-pascal', dist: {
+      name: 'Pascal (Binomial Negativa)', notation: 'X \\sim \\mathrm{NB}(r,p)',
+      use: 'Número de ensayos $x$ para alcanzar el $r$-ésimo éxito.',
+      fmp: String.raw`$$f(x) = \binom{x-1}{r-1} p^{r}(1-p)^{\,x-r}, \quad x=r,r+1,\ldots$$`,
+      mean: String.raw`$$\mu = \dfrac{r}{p}$$`,
+      var:  String.raw`$$\sigma^{2} = \dfrac{r(1-p)}{p^{2}}$$`,
+      tip: 'Generalización de la geométrica (caso $r=1$). Revisa si el texto cuenta fracasos en vez de ensayos.'
+    }},
+
+    { id: 't4-poisson', dist: {
+      name: 'Poisson', notation: 'X \\sim \\mathrm{Poi}(\\lambda)',
+      use: 'Número de ocurrencias de un evento raro en un intervalo fijo (tiempo/espacio) con tasa $\\lambda$.',
+      fmp: String.raw`$$f(x) = \dfrac{e^{-\lambda}\,\lambda^{x}}{x!}, \quad x=0,1,2,\ldots$$`,
+      mean: String.raw`$$\mu = \lambda$$`,
+      var:  String.raw`$$\sigma^{2} = \lambda$$`,
+      tip: 'Escala $\\lambda$ proporcionalmente al intervalo: si $\\lambda$=2/mes, en 3 meses usa $\\lambda=6$.'
+    }},
+
+    { id: 't4-aprox', title: 'Aproximaciones entre modelos',
+      cards: [
+        { name: 'Binomial → Poisson', math:
+          String.raw`$$n \to \infty,\; p\to 0,\; np=\lambda \;\Rightarrow\; \mathrm{Bin}(n,p)\approx \mathrm{Poi}(\lambda)$$`,
+          tip: 'Usar cuando $n\\ge 20$ y $p\\le 0.05$ (eventos raros en muchos ensayos).' },
+        { name: 'Hipergeométrica → Binomial', math:
+          String.raw`$$\dfrac{n}{N}\le 0.05 \;\Rightarrow\; H(N,K,n) \approx \mathrm{Bin}\!\left(n,\tfrac{K}{N}\right)$$`,
+          tip: 'Cuando la muestra es pequeña frente a la población, el reemplazo casi no importa.' },
+        { name: 'Binomial → Normal', math:
+          String.raw`$$np\ge 5 \text{ y } n(1-p)\ge 5 \;\Rightarrow\; \mathrm{Bin}(n,p)\approx N(np,\,npq)$$`,
+          tip: 'Aplica corrección por continuidad ($\\pm 0.5$) al pasar de discreta a continua.' },
+        { name: 'Poisson → Normal', math:
+          String.raw`$$\lambda \ge 10 \;\Rightarrow\; \mathrm{Poi}(\lambda) \approx N(\lambda,\lambda)$$`,
+          tip: 'Para tasas grandes evita el cálculo factorial tedioso.' },
+      ],
+      callouts: [
+        { cap: 'error común · discretas',
+          items: [
+            '<strong>Unidades de $\\lambda$ desalineadas.</strong> Si el dato es “2 por mes” y preguntan 3 meses, $\\lambda=6$, no 2.',
+            '<strong>Usar Binomial con muestreo sin reemplazo.</strong> Cuando $n/N>0.05$, usa Hipergeométrica.',
+            '<strong>Incluir/excluir extremos mal.</strong> $P(X\\ge 3)=1-P(X\\le 2)$, no $1-P(X\\le 3)$.',
+            '<strong>Olvidar corrección por continuidad.</strong> Al aproximar Binomial por Normal: $P(X\\le k)\\approx \\Phi\\!\\bigl((k+0.5-np)/\\sqrt{npq}\\bigr)$.',
+          ]
+        }
+      ]
+    },
+  ]
+},
+
+/* ============================================================
+   TEMA 5 · DISTRIBUCIONES PARA VA CONTINUAS
+   ============================================================ */
+{
+  id: 't5',
+  num: '05',
+  title: 'Modelos Probabilísticos · VA Continuas',
+  subtitle: 'Uniforme · Exponencial · Normal · Gamma · Weibull · Log-normal',
+  sections: [
+
+    { id: 't5-unif', dist: {
+      name: 'Uniforme continua', notation: 'X \\sim U(a,b)',
+      use: 'Todo valor en $[a,b]$ es igualmente probable. Modela incertidumbre total en un rango.',
+      fmp: String.raw`$$f(x) = \dfrac{1}{b-a}, \quad a\le x\le b$$`,
+      fda: String.raw`$$F(x) = \dfrac{x-a}{b-a}, \quad a\le x\le b$$`,
+      mean: String.raw`$$\mu = \dfrac{a+b}{2}$$`,
+      var:  String.raw`$$\sigma^{2} = \dfrac{(b-a)^{2}}{12}$$`,
+      tip: 'La probabilidad en cualquier subintervalo es proporcional a su longitud.'
+    }},
+
+    { id: 't5-exp', dist: {
+      name: 'Exponencial', notation: 'X \\sim \\mathrm{Exp}(\\lambda)',
+      use: 'Tiempo ENTRE eventos que ocurren con tasa constante $\\lambda$ (asociada a Poisson).',
+      fmp: String.raw`$$f(x) = \lambda e^{-\lambda x}, \quad x\ge 0$$`,
+      fda: String.raw`$$F(x) = 1-e^{-\lambda x}$$`,
+      mean: String.raw`$$\mu = \dfrac{1}{\lambda}$$`,
+      var:  String.raw`$$\sigma^{2} = \dfrac{1}{\lambda^{2}}$$`,
+      tip: 'Pérdida de memoria: $P(X>s+t\\mid X>s)=P(X>t)$. Si te dan “media $=m$”, entonces $\\lambda=1/m$.'
+    }},
+
+    { id: 't5-normal', dist: {
+      name: 'Normal (Gauss)', notation: 'X \\sim N(\\mu,\\sigma^{2})',
+      use: 'Mediciones con errores aleatorios simétricos; suma de muchas variables (TLC).',
+      fmp: String.raw`$$f(x) = \dfrac{1}{\sigma\sqrt{2\pi}}\,\exp\!\left[-\dfrac{(x-\mu)^{2}}{2\sigma^{2}}\right]$$`,
+      mean: String.raw`$$\mu = \mu$$`,
+      var:  String.raw`$$\sigma^{2} = \sigma^{2}$$`,
+      tip: 'Para probabilidades: estandariza a $Z=(X-\\mu)/\\sigma$ y usa tabla de $\\Phi(z)$.'
+    }},
+
+    { id: 't5-z', title: 'Estandarización y Normal estándar',
+      cards: [
+        { name: 'Transformación estándar', math:
+          String.raw`$$Z = \dfrac{X-\mu}{\sigma}, \quad Z\sim N(0,1)$$`,
+          tip: 'Siempre que uses tablas, primero estandariza.' },
+        { name: 'Probabilidades con $\\Phi$', math:
+          String.raw`\begin{align*} P(X\le x) &= \Phi\!\left(\dfrac{x-\mu}{\sigma}\right) \\ P(a\le X\le b) &= \Phi\!\left(\dfrac{b-\mu}{\sigma}\right)-\Phi\!\left(\dfrac{a-\mu}{\sigma}\right) \\ \Phi(-z) &= 1-\Phi(z) \end{align*}`,
+          tip: 'La última identidad por simetría te ahorra buscar $z$ negativos.' },
+        { name: 'Regla empírica 68–95–99.7', math:
+          String.raw`\begin{align*} P(\mu-\sigma\le X\le\mu+\sigma) &\approx 0.6827 \\ P(\mu-2\sigma\le X\le\mu+2\sigma) &\approx 0.9545 \\ P(\mu-3\sigma\le X\le\mu+3\sigma) &\approx 0.9973 \end{align*}`,
+          tip: 'Comprobación rápida de sentido común antes de confiar en la tabla.' },
+      ],
+      table: {
+        head: ['Valor crítico', 'P(Z ≤ z)', 'Uso típico'],
+        rows: [
+          ['<span class="mono">z = 1.2816</span>', '0.9000', 'Percentil 90 / IC 80%'],
+          ['<span class="mono">z = 1.6449</span>', '0.9500', 'IC 90% · prueba unilateral α=0.05'],
+          ['<span class="mono">z = 1.9600</span>', '0.9750', 'IC 95% · prueba bilateral α=0.05'],
+          ['<span class="mono">z = 2.3263</span>', '0.9900', 'IC 98% · prueba unilateral α=0.01'],
+          ['<span class="mono">z = 2.5758</span>', '0.9950', 'IC 99% · prueba bilateral α=0.01'],
+          ['<span class="mono">z = 3.0902</span>', '0.9990', 'IC 99.8%'],
+        ]
+      }
+    },
+
+    { id: 't5-gamma', dist: {
+      name: 'Gamma', notation: 'X \\sim \\Gamma(\\alpha,\\beta)',
+      use: 'Tiempo de espera hasta el $\\alpha$-ésimo evento de un Poisson con media $\\beta$.',
+      fmp: String.raw`$$f(x) = \dfrac{1}{\beta^{\alpha}\,\Gamma(\alpha)}\,x^{\alpha-1}\,e^{-x/\beta}, \quad x\ge 0$$`,
+      mean: String.raw`$$\mu = \alpha\beta$$`,
+      var:  String.raw`$$\sigma^{2} = \alpha\beta^{2}$$`,
+      tip: 'Con $\\alpha=1$ recuperas la Exponencial($1/\\beta$); con $\\alpha=n/2, \\beta=2$ es $\\chi^{2}_{n}$.'
+    }},
+
+    { id: 't5-weib', dist: {
+      name: 'Weibull', notation: 'X \\sim W(\\alpha,\\beta)',
+      use: 'Tiempo de falla de componentes mecánicos/eléctricos (tasa de falla no constante).',
+      fmp: String.raw`$$f(x) = \alpha\beta\,x^{\beta-1}\,e^{-\alpha x^{\beta}}, \quad x\ge 0$$`,
+      fda: String.raw`$$F(x) = 1-e^{-\alpha x^{\beta}}$$`,
+      mean: String.raw`$$\mu = \alpha^{-1/\beta}\,\Gamma\!\left(1+\dfrac{1}{\beta}\right)$$`,
+      var:  String.raw`$$\sigma^{2} = \alpha^{-2/\beta}\!\left[\Gamma\!\left(1+\dfrac{2}{\beta}\right)-\Gamma^{2}\!\left(1+\dfrac{1}{\beta}\right)\right]$$`,
+      tip: '$\\beta<1$ tasa decreciente (mortalidad infantil), $\\beta=1$ exponencial, $\\beta>1$ desgaste.'
+    }},
+
+    { id: 't5-lognormal', dist: {
+      name: 'Log-normal', notation: '\\ln X \\sim N(\\mu,\\sigma^{2})',
+      use: 'Variables estrictamente positivas con sesgo derecho (concentraciones, ingresos, tiempos).',
+      fmp: String.raw`$$f(x) = \dfrac{1}{x\sigma\sqrt{2\pi}}\,\exp\!\left[-\dfrac{(\ln x-\mu)^{2}}{2\sigma^{2}}\right], \quad x>0$$`,
+      mean: String.raw`$$E[X] = e^{\mu+\sigma^{2}/2}$$`,
+      var:  String.raw`$$\mathrm{Var}(X) = e^{2\mu+\sigma^{2}}\!\left(e^{\sigma^{2}}-1\right)$$`,
+      tip: 'Para $P(X\\le x)$: usa $\\Phi\\!\\bigl((\\ln x-\\mu)/\\sigma\\bigr)$, estandarizando sobre $\\ln X$.'
+    }},
+
+    { id: 't5-tlc', title: 'Teorema del Límite Central',
+      cards: [
+        { name: 'Media muestral', math:
+          String.raw`$$\overline{X} = \dfrac{1}{n}\sum_{i=1}^{n} X_{i}, \quad E[\overline{X}]=\mu,\; \mathrm{Var}(\overline{X})=\dfrac{\sigma^{2}}{n}$$`,
+          tip: 'La varianza de la media decrece con $n$; por eso muestras grandes son más precisas.' },
+        { name: 'TLC', math:
+          String.raw`$$n\to\infty \;\Longrightarrow\; \dfrac{\overline{X}-\mu}{\sigma/\sqrt{n}} \xrightarrow{d} N(0,1)$$`,
+          tip: 'Aplica aun si $X$ no es normal, siempre que $\\sigma$ sea finita. Regla práctica: $n\\ge 30$.' },
+        { name: 'Suma de $n$ variables', math:
+          String.raw`$$S_{n} = \sum_{i=1}^{n} X_{i} \approx N\!\bigl(n\mu,\;n\sigma^{2}\bigr)$$`,
+          tip: 'Útil para modelar tiempos totales, sumas de errores o conteos agregados.' },
+      ],
+      callouts: [
+        { cap: 'error común · continuas',
+          items: [
+            '<strong>Parametrización de la Exponencial.</strong> Revisa si el texto da la media $\\beta=1/\\lambda$ o la tasa $\\lambda$.',
+            '<strong>No estandarizar antes de usar tabla.</strong> La tabla $\\Phi(z)$ es para $N(0,1)$, no para la $X$ original.',
+            '<strong>Tratar $f(x)$ como probabilidad.</strong> En continuas $P(X=x)=0$; la probabilidad es área.',
+            '<strong>Confundir Gamma y Weibull.</strong> Gamma se usa para tiempos de espera acumulados; Weibull para tiempos a la falla.',
+          ]
+        }
+      ]
+    },
+  ]
+},
+
+/* ============================================================
+   APÉNDICE · TIPS & ERRORES COMUNES (resumen global)
+   ============================================================ */
+{
+  id: 'apx',
+  num: 'AP',
+  title: 'Apéndice · Atajos y recordatorios',
+  subtitle: 'Símbolos · tabla resumen · reglas rápidas',
+  sections: [
+    { id: 'apx-sym', title: 'Símbolos usados',
+      table: {
+        head: ['Símbolo', 'Significado', 'Observación'],
+        rows: [
+          ['<span class="mono">S</span>', 'Espacio muestral', 'Conjunto de todos los resultados'],
+          ['<span class="mono">Ø</span>', 'Conjunto vacío', 'Evento imposible, $P(\\varnothing)=0$'],
+          ['<span class="mono">∪, ∩</span>', 'Unión, intersección', '“o”, “y”'],
+          ['<span class="mono">A<sup>c</sup></span>', 'Complemento', '“no $A$”'],
+          ['<span class="mono">P(A|B)</span>', 'Condicional', 'Probabilidad de $A$ dado $B$'],
+          ['<span class="mono">E[X]</span>', 'Esperanza', 'También $\\mu$'],
+          ['<span class="mono">Var(X)</span>', 'Varianza', 'También $\\sigma^{2}$'],
+          ['<span class="mono">σ<sub>XY</sub></span>', 'Covarianza', '$E[XY]-E[X]E[Y]$'],
+          ['<span class="mono">ρ</span>', 'Correlación', '$\\sigma_{XY}/(\\sigma_{X}\\sigma_{Y})$'],
+          ['<span class="mono">Φ(z)</span>', 'FDA de $N(0,1)$', 'Valor de la tabla'],
+          ['<span class="mono">Γ(α)</span>', 'Función Gamma', '$\\Gamma(n)=(n-1)!$ para $n$ entero'],
+        ]
+      }
+    },
+
+    { id: 'apx-resumen', title: 'Distribuciones · media y varianza en una tabla',
+      table: {
+        head: ['Distribución', 'Parámetros', 'Media $\\mu$', 'Varianza $\\sigma^{2}$'],
+        rows: [
+          ['Bernoulli', '$p$', '$p$', '$pq$'],
+          ['Binomial', '$n,p$', '$np$', '$npq$'],
+          ['Hipergeométrica', '$N,K,n$', '$n\\,K/N$', '$n\\tfrac{K}{N}\\tfrac{N-K}{N}\\tfrac{N-n}{N-1}$'],
+          ['Geométrica', '$p$', '$1/p$', '$(1-p)/p^{2}$'],
+          ['Pascal', '$r,p$', '$r/p$', '$r(1-p)/p^{2}$'],
+          ['Poisson', '$\\lambda$', '$\\lambda$', '$\\lambda$'],
+          ['Uniforme', '$a,b$', '$(a+b)/2$', '$(b-a)^{2}/12$'],
+          ['Exponencial', '$\\lambda$', '$1/\\lambda$', '$1/\\lambda^{2}$'],
+          ['Normal', '$\\mu,\\sigma^{2}$', '$\\mu$', '$\\sigma^{2}$'],
+          ['Gamma', '$\\alpha,\\beta$', '$\\alpha\\beta$', '$\\alpha\\beta^{2}$'],
+          ['Weibull', '$\\alpha,\\beta$', '$\\alpha^{-1/\\beta}\\Gamma(1+1/\\beta)$', 'ver tema 5'],
+          ['Log-normal', '$\\mu,\\sigma$', '$e^{\\mu+\\sigma^{2}/2}$', '$e^{2\\mu+\\sigma^{2}}(e^{\\sigma^{2}}-1)$'],
+        ]
+      },
+      callouts: [
+        { cap: 'errores clásicos en examen de la FI',
+          items: [
+            '<strong>1. Marcar Binomial sin verificar independencia</strong> o $p$ constante — en muestreo sin reemplazo usa Hipergeométrica.',
+            '<strong>2. Olvidar la corrección por continuidad</strong> al aproximar una discreta con Normal ($\\pm 0.5$).',
+            '<strong>3. Confundir “al menos uno” con “exactamente uno”</strong> — el primero es $1-P(\\text{ninguno})$, el segundo suma sólo $k=1$.',
+            '<strong>4. Integrar sobre todo $\\mathbb{R}$ olvidando el soporte.</strong> Si $f(x)$ vive en $[2,10]$, los límites NO son $\\pm\\infty$.',
+            '<strong>5. Invertir Bayes.</strong> El prior $P(B)$ multiplica a la verosimilitud, y el denominador es la probabilidad total, no $P(A)$ suelto.',
+            '<strong>6. Estandarizar con la varianza en vez de la desviación.</strong> $Z=(X-\\mu)/\\sigma$, no $(X-\\mu)/\\sigma^{2}$.',
+            '<strong>7. Reportar $\\rho>1$ o $\\rho<-1$</strong> — señal de error aritmético; revisa covarianza y desviaciones.',
+            '<strong>8. Usar $\\lambda$ sin ajustar al intervalo</strong> pedido (p. ej. tasa por mes vs. por trimestre).',
+            '<strong>9. Asumir que covarianza nula implica independencia.</strong> Falso en general; sólo se cumple en normales conjuntas.',
+            '<strong>10. Sumar probabilidades de eventos no excluyentes.</strong> $P(A\\cup B)\\neq P(A)+P(B)$ si $A\\cap B\\neq\\varnothing$.',
+            '<strong>11. Confundir permutación con combinación</strong> en problemas de conteo — el orden importa o no, nunca “a veces”.',
+            '<strong>12. Igualar la moda a la mediana y a la media</strong> en distribuciones asimétricas — sólo coinciden en simétricas unimodales.',
+          ]
+        }
+      ]
+    },
+  ]
+},
+
+];
