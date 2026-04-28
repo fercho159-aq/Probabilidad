@@ -20,6 +20,8 @@ Carpeta de estudio para el **examen extraordinario**. Cada nota contiene el enun
 | 02 | [[02_2018-1_Segundo_Final]] | 13-dic-2017 | 5 | Bayes · Independencia · Conjunta continua · Poisson · Gamma |
 | 03 | [[03_2017-1_Primer_Final]] | 3-dic-2016 | 5 | Confiabilidad · Bayes · Hipergeométrica conjunta · Poisson↔Exp · Gamma |
 | 04 | [[04_2017-1_Segundo_Final]] | 10-dic-2016 | 5 | Bayes · Marginal/Condicional · Binomial · Prueba t |
+| 05 | [[05_Algoritmo_General]] | — | meta | Algoritmo único de 6 pasos para los 21 problemas |
+| 06 | [[06_Teoria_Minima]] | — | teoría | Definiciones, axiomas y fórmulas mínimas |
 
 ## Cómo usar esta guía (en 3 pasos)
 
